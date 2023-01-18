@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Game, "Rock paper Scissors"</title>
+</head>
+<style>
+
+    body {
+        height: 500px;
+        width: 100%;
+        font-size: 2em;
+    }
+
+    button {
+    font-size: 1.2em;
+    }
+
+    input {
+    font-size: 1em;
+    }
+
+
+    .edge {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    }
+
+
+    .columns {
+    border: 1px solid #555;
+    height: 70%;
+    width: 70%;
+    display: flex;
+    }
+
+    .columns > div {
+    border: 4px solid #333;
+    flex: 1;
+    }
+
+    .columns > div:nth-of-type(2) {
+    flex: 2;    
+    }
+
+    .columns .centerColumn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;  
+    }
+
+    .playingGame > button {
+    margin-right: 10px;
+    }
+
+    .result p {
+    font-size: 2em;
+    }
+
+</style>
+</head>
+
+<body>
+
+    <div class="edge">
+
+        <div class="columns">
+            
+            <div class="column">
+            <p>cpu</p>
+            <p id="cpuShapeDisplay"></p>
+            </div>
+
+            <div class="column centerColumn">
+
+                <div class="preparation">
+                    <div>
+                    <label for="inputName" id="labelInputName">Input your name!</label>
+                    </div>
+
+                    <div>
+                    <input type="text" id="inputName" name="inputName">
+                    </div>
+
+                    <div>
+                    <input type="submit" value="Game Start!" id="submitButton" >
+                    </div>
+                </div>
+   
+                <div class="playingGame">
+                    <p id="message">Rock! Paper! Scissors...</p>
+                    <button data-shape="Rock!">Rock</button>
+                    <button data-shape="Paper!">Paper</button>
+                    <button data-shape="Scissors!">Scissors</button>
+
+                </div>
+    
+                <div class="result">
+                    <p></p>
+                    <button id="tryAgain">Try Again</button>
+                </div>
+
+            </div>
+
+            <div class="column">
+                <p id="userNameDisplay"> USER </p>
+                <p id="userShapeDisplay"></p>
+            </div>
+   
+        </div>
+        
+    </div>
+<script>
+    window.addEventListener("DOMContentLoaded", function(){
+
+        const informationObject = {
+        
+            labelInputName: document.getElementById("labelInputName"),
+            inputName: document.getElementById("inputName"),
+            submitButton: document.getElementById("submitButton"),
+            userNameDisplay: document.getElementById("userNameDisplay"),
+            
+            preparation: document.querySelector(".preparation"),
+            playingGame: document.querySelector(".playingGame"),
+            result: document.querySelector(".result"),
+            
+            cpuShapeDisplay: document.getElementById("cpuShapeDisplay"),
+            userShapeDisplay: document.getElementById("userShapeDisplay"), 
+
+            rockButton: document.querySelector('button[data-shape="Rock!"]'),
+            paperButton: document.querySelector('button[data-shape="Paper!"]'),
+            scissorsButton: document.querySelector('button[data-shape="Scissors!"'),
+            shapeButtons: document.querySelectorAll("button[data-shape]"),
+            tryAgainButton: document.getElementById("tryAgain"),
+
+            userShape: "",
+            cpuShape: "",
+            
+            readyAudio: new Audio('sound-files/ready.mp3'),
+            goAudio: new Audio('sound-files/go.mp3'),
+            youWinAudio: new Audio('sound-files/you-win.mp3'),
+            youLoseAudio: new Audio('sound-files/you-lose.mp3'),
+            drawGameAudio: new Audio('sound-files/draw-game.mp3'),
+
+            firstGameflag: true,
+
+        }
+
+        function judgement() {
+
+            informationObject.playingGame.style.display = "none";
+            informationObject.result.style.display = "block";
+
+            const resultDisplay = document.querySelector(".result > p");
+
+            let resultMessage = "";
+
+            if (informationObject.userShape === "Rock!") {
+
+                if(informationObject.cpuShape === "Rock!") {
+                    resultMessage = "Draw Game";
+                } else if (informationObject.cpuShape === "Paper!") {
+                    resultMessage = "You Lose...";
+                } else if (informationObject.cpuShape === "Scissors!") {
+                    resultMessage = "You Win!";
+                }
+
+            } else if (informationObject.userShape === "Paper!") {
+                if(informationObject.cpuShape === "Rock!") {            
+                    resultMessage = "You Win!";
+                } else if (informationObject.cpuShape === "Paper!") {
+                    resultMessage = "Draw Game";
+                } else if (informationObject.cpuShape === "Scissors!") {             
+                    resultMessage = "You Lose...";
+                }
+
+            } else if (informationObject.userShape === "Scissors!") {
+                if(informationObject.cpuShape === "Rock!") {
+                    resultMessage = "You Lose...";
+                } else if (informationObject.cpuShape === "Paper!") {
+                    resultMessage = "You Win!";
+                } else if (informationObject.cpuShape === "Scissors!") {
+                    resultMessage = "Draw Game";
+                }
+            }
+
+
+            if(resultMessage === "You Win!") {
+        
+            informationObject.youWinAudio.play();
+
+            } else if (resultMessage === "You Lose...") {
+            
+            informationObject.youLoseAudio.play();
+
+            } else if (resultMessage === "Draw Game") {
+            
+            informationObject.drawGameAudio.play();
+
+            }
+
+            resultDisplay.textContent = resultMessage;
+
+        }
+
+        function cpuDecidesShape(){
+        
+            const randomNumber = function() {
+                    
+                min = 1;
+                max = 3;
+                return Math.floor(Math.random() * (max - min + 1) + min);
+
+            };
+        
+            if (randomNumber === 1) {         
+            informationObject.cpuShape = "Rock!";
+            } else if (randomNumber === 2) {
+            informationObject.cpuShape = "Paper!";
+            } else if(randomNumber === 3) {
+            informationObject.cpuShape = "Scissors!";
+            }
+        
+            informationObject.cpuShapeDisplay.textContent = informationObject.cpuShape;
+
+            judgement();
+        
+        }
+
+        function userDecidesShape(clickedButton) {
+        
+            informationObject.userShape = clickedButton.getAttribute("data-shape");
+            
+            informationObject.userShapeDisplay.textContent = informationObject.userShape
+            
+            informationObject.playingGame.style.display = "none";
+
+            informationObject.result.style.display = "block";
+
+            cpuDecidesShape();
+
+
+        }  
+
+
+        function gameStart() {
+        
+            informationObject.goAudio.play();
+
+            if ( informationObject.firstGameflag === true) {
+                let userInput;
+            
+                if (informationObject.inputName.value === "") {
+                userInput = "Anonymous";
+                } else {
+                userInput = informationObject.inputName.value;
+                }
+
+                informationObject.userNameDisplay.innerHTML= userInput.toUpperCase(); 
+            
+                informationObject.firstGameflag = false;　
+            }
+
+            informationObject.preparation.style.display = "none";  
+
+            informationObject.playingGame.style.display = "block";
+        
+        }
+
+
+        function attachEventListeners() {
+
+            const shapeButtons = document.querySelectorAll("button[data-shape]");
+
+            shapeButtons.forEach(function(shapeButton){
+        
+                shapeButton.addEventListener("click", function(e){
+
+                    const clickedButton = e.currentTarget;
+
+                    userDecidesShape(clickedButton);
+        
+                });
+
+            });
+
+        
+            informationObject.tryAgainButton.addEventListener("click", function(e) {
+
+                informationObject.result.style.display = "none";
+
+                gameStart();
+
+            })
+
+        }
+
+        attachEventListeners();
+    
+        informationObject.playingGame.style.display = "none";
+        informationObject.result.style.display = "none";
+
+        informationObject.inputName.focus();
+        informationObject.readyAudio.play();
+
+        informationObject.submitButton.addEventListener("click", function() {
+                
+        gameStart();
+
+        });
+        
+    });
+  
+</script>
+</body>
+</html>
