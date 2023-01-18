@@ -76,7 +76,7 @@
         <div class="columns">
             
             <div class="column">
-            <p>cpu</p>
+            <p>CPU</p>
             <p id="cpuShapeDisplay"></p>
             </div>
 
@@ -193,7 +193,6 @@
                 }
             }
 
-
             if(resultMessage === "You Win!") {
         
             informationObject.youWinAudio.play();
@@ -212,16 +211,17 @@
 
         }
 
+        function randomNumberGenerator() {         
+            min = 1;
+            max = 3;
+            const result = Math.floor(Math.random() * (max - min + 1) + min);
+            return result;
+        }
+
         function cpuDecidesShape(){
         
-            const randomNumber = function() {
-                    
-                min = 1;
-                max = 3;
-                return Math.floor(Math.random() * (max - min + 1) + min);
+            const randomNumber = randomNumberGenerator();
 
-            };
-        
             if (randomNumber === 1) {         
             informationObject.cpuShape = "Rock!";
             } else if (randomNumber === 2) {
@@ -267,7 +267,7 @@
 
                 informationObject.userNameDisplay.innerHTML= userInput.toUpperCase(); 
             
-                informationObject.firstGameflag = false;　
+                informationObject.firstGameflag = false;
             }
 
             informationObject.preparation.style.display = "none";  
@@ -314,12 +314,12 @@
 
         informationObject.submitButton.addEventListener("click", function() {
                 
-        gameStart();
+            gameStart();
 
         });
         
     });
-    // test second third four
+
 </script>
 </body>
 </html>
