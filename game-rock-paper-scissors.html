@@ -188,12 +188,9 @@
             informationObject.playingGame.style.display = "none";
             informationObject.result.style.display = "block";
 
-            const resultDisplay = document.querySelector(".result p");
-            // const resultImageDisplay = document.getElementById("resultImageDisplay");
-            const resultImageDisplay = document.querySelector(".result img");
-            console.log(resultDisplay);
-            console.log(resultImageDisplay);
-
+            const resultDisplay = document.querySelector(".result > p");
+            const resultImageDisplay = document.querySelector(".result > img");
+            
             let resultMessage = "";
 
             if (informationObject.playerShape === "Rock!") {
