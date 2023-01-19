@@ -14,6 +14,12 @@
         font-size: 2em;
     }
 
+    img {
+        
+        max-width: 200px;
+        
+    }
+
     button {
     font-size: 1.2em;
     }
@@ -24,7 +30,7 @@
 
 
     .edge {
-    height: 100%;
+    height: 150%;
     width: 100%;
 
     display: flex;
@@ -59,11 +65,27 @@
     }
 
     .playingGame > button {
-    margin-right: 10px;
+        margin-right: 10px;
+    }
+
+    .result {
+        text-align: center;
+    }
+    .result * {
+        
+        margin: 0;
+        padding: 0;
     }
 
     .result p {
-    font-size: 2em;
+        font-size: 2em;
+        
+    }
+
+    .result img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
 
 </style>
@@ -76,8 +98,9 @@
         <div class="columns">
             
             <div class="column">
-            <p>CPU</p>
-            <p id="cpuShapeDisplay"></p>
+                <p>CPU</p>
+                <img id="cpuImageDisplay" src="images/cpu.png" alt="computer's character">
+                <p id="cpuShapeDisplay"></p>
             </div>
 
             <div class="column centerColumn">
@@ -106,14 +129,16 @@
     
                 <div class="result">
                     <p></p>
+                    <img id="resultImageDisplay" src="" alt="result image">
                     <button id="tryAgain">Try Again</button>
                 </div>
 
             </div>
 
             <div class="column">
-                <p id="userNameDisplay"> USER </p>
-                <p id="userShapeDisplay"></p>
+                <p id="playerNameDisplay">Player</p>
+                <img id="playerImageDisplay" src="images/player.png" alt="player's character image">
+                <p id="playerShapeDisplay"></p>
             </div>
    
         </div>
@@ -127,14 +152,17 @@
             labelInputName: document.getElementById("labelInputName"),
             inputName: document.getElementById("inputName"),
             submitButton: document.getElementById("submitButton"),
-            userNameDisplay: document.getElementById("userNameDisplay"),
+            playerNameDisplay: document.getElementById("playerNameDisplay"),
             
             preparation: document.querySelector(".preparation"),
             playingGame: document.querySelector(".playingGame"),
             result: document.querySelector(".result"),
             
             cpuShapeDisplay: document.getElementById("cpuShapeDisplay"),
-            userShapeDisplay: document.getElementById("userShapeDisplay"), 
+            cpuImageDisplay: document.getElementById("cpuImageDisplay"),
+
+            playerShapeDisplay: document.getElementById("playerShapeDisplay"), 
+            playerImageDisplay: document.getElementById("playerImageDisplay"),
 
             rockButton: document.querySelector('button[data-shape="Rock!"]'),
             paperButton: document.querySelector('button[data-shape="Paper!"]'),
@@ -142,7 +170,7 @@
             shapeButtons: document.querySelectorAll("button[data-shape]"),
             tryAgainButton: document.getElementById("tryAgain"),
 
-            userShape: "",
+            playerShape: "",
             cpuShape: "",
             
             readyAudio: new Audio('sound-files/ready.mp3'),
@@ -160,11 +188,15 @@
             informationObject.playingGame.style.display = "none";
             informationObject.result.style.display = "block";
 
-            const resultDisplay = document.querySelector(".result > p");
+            const resultDisplay = document.querySelector(".result p");
+            // const resultImageDisplay = document.getElementById("resultImageDisplay");
+            const resultImageDisplay = document.querySelector(".result img");
+            console.log(resultDisplay);
+            console.log(resultImageDisplay);
 
             let resultMessage = "";
 
-            if (informationObject.userShape === "Rock!") {
+            if (informationObject.playerShape === "Rock!") {
 
                 if(informationObject.cpuShape === "Rock!") {
                     resultMessage = "Draw Game";
@@ -174,7 +206,7 @@
                     resultMessage = "You Win!";
                 }
 
-            } else if (informationObject.userShape === "Paper!") {
+            } else if (informationObject.playerShape === "Paper!") {
                 if(informationObject.cpuShape === "Rock!") {            
                     resultMessage = "You Win!";
                 } else if (informationObject.cpuShape === "Paper!") {
@@ -183,7 +215,7 @@
                     resultMessage = "You Lose...";
                 }
 
-            } else if (informationObject.userShape === "Scissors!") {
+            } else if (informationObject.playerShape === "Scissors!") {
                 if(informationObject.cpuShape === "Rock!") {
                     resultMessage = "You Lose...";
                 } else if (informationObject.cpuShape === "Paper!") {
@@ -195,15 +227,18 @@
 
             if(resultMessage === "You Win!") {
         
-            informationObject.youWinAudio.play();
+                informationObject.youWinAudio.play();
+                resultImageDisplay.src = "images/you-win.png";
 
             } else if (resultMessage === "You Lose...") {
             
-            informationObject.youLoseAudio.play();
+                informationObject.youLoseAudio.play();
+                resultImageDisplay.src = "images/you-lose.png"
 
             } else if (resultMessage === "Draw Game") {
             
-            informationObject.drawGameAudio.play();
+                informationObject.drawGameAudio.play();
+                resultImageDisplay.src = "images/draw-game.png"
 
             }
 
@@ -232,15 +267,45 @@
         
             informationObject.cpuShapeDisplay.textContent = informationObject.cpuShape;
 
+            if (informationObject.cpuShape ==="Rock!") {
+
+                informationObject.cpuImageDisplay.src = "images/rock.png";
+
+            } else if (informationObject.cpuShape ===" ") {
+
+                informationObject.cpuImageDisplay.src = "images/paper.png";
+
+            } else {
+
+                informationObject.cpuImageDisplay.src = "images/scissors.png";
+
+            }
+
             judgement();
         
         }
 
-        function userDecidesShape(clickedButton) {
+        function playerDecidesShape(clickedButton) {
         
-            informationObject.userShape = clickedButton.getAttribute("data-shape");
+            informationObject.playerShape = clickedButton.getAttribute("data-shape");
             
-            informationObject.userShapeDisplay.textContent = informationObject.userShape
+            informationObject.playerShapeDisplay.textContent = informationObject.playerShape
+
+            // Shows players hand-shape image 
+            if (informationObject.playerShape ==="Rock!") {
+
+                informationObject.playerImageDisplay.src = "images/rock.png";
+            
+            } else if (informationObject.playerShape ===" ") {
+
+                informationObject.playerImageDisplay.src = "images/paper.png";
+            
+            } else {
+
+                informationObject.playerImageDisplay.src = "images/scissors.png";
+
+            }
+
             
             informationObject.playingGame.style.display = "none";
 
@@ -257,15 +322,15 @@
             informationObject.goAudio.play();
 
             if ( informationObject.firstGameflag === true) {
-                let userInput;
+                let playerInput;
             
                 if (informationObject.inputName.value === "") {
-                userInput = "Anonymous";
+                playerInput = "Anonymous";
                 } else {
-                userInput = informationObject.inputName.value;
+                playerInput = informationObject.inputName.value;
                 }
 
-                informationObject.userNameDisplay.innerHTML= userInput.toUpperCase(); 
+                informationObject.playerNameDisplay.innerHTML= playerInput.toUpperCase(); 
             
                 informationObject.firstGameflag = false;
             }
@@ -287,7 +352,7 @@
 
                     const clickedButton = e.currentTarget;
 
-                    userDecidesShape(clickedButton);
+                    playerDecidesShape(clickedButton);
         
                 });
 
@@ -297,6 +362,10 @@
             informationObject.tryAgainButton.addEventListener("click", function(e) {
 
                 informationObject.result.style.display = "none";
+
+                informationObject.cpuImageDisplay.src = "images/cpu.png";
+
+                informationObject.playerImageDisplay.src = "images/player.png";
 
                 gameStart();
 
